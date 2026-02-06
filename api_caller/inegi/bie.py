@@ -28,7 +28,7 @@ class INEGI_BIE(BaseAPI):
         """
 
         # Definir url de API
-        endpoint = f"/CL_FREQ/{frequency_id}/es/BIE/2.0/{self._BaseAPI__api_key}?type=json"
+        endpoint = f"/CL_FREQ/{frequency_id}/es/BIE-BISE/2.0/{self._BaseAPI__api_key}?type=json"
 
         # Extraer y convertir datos
         data_json = self._make_request(endpoint=endpoint)
@@ -50,7 +50,7 @@ class INEGI_BIE(BaseAPI):
         """
         
         # Definir url de API
-        endpoint = f"/CL_UNIT/{unit_id}/es/BIE/2.0/{self._BaseAPI__api_key}?type=json"
+        endpoint = f"/CL_UNIT/{unit_id}/es/BIE-BISE/2.0/{self._BaseAPI__api_key}?type=json"
 
         # Extraer y convertir datos 
         data_json = self._make_request(endpoint=endpoint)
@@ -173,7 +173,7 @@ class INEGI_BIE(BaseAPI):
             raise ValueError("El 'serie_id' debe ser una cadena de texto o una lista de cadenas de texto.")
 
         # Definir url de API
-        endpoint = f"/INDICATOR/{','.join(serie_id)}/es/0700/{last_data}/BIE/2.0/{self._BaseAPI__api_key}?type=json"
+        endpoint = f"/INDICATOR/{','.join(serie_id)}/es/00/{last_data}/BIE-BISE/2.0/{self._BaseAPI__api_key}?type=json"
 
         return endpoint
 
