@@ -20,12 +20,17 @@ class BaseAPI:
         logging.basicConfig(level=logging.INFO)
 
     def _make_request(self, endpoint, headers=None, params=None, data=None, json=None):
+
         url = f"{self.base_url}{endpoint}"
+
         if headers is None:
             headers = {}
         if params is None:
             params = {}
-        headers['Authorization'] = f"Bearer {self._BaseAPI__api_key}"
+        
+        if self._BaseAPI__api_key:
+            headers['Authorization'] = f"Bearer {self._BaseAPI__api_key}"
+
 
         try:
             response = self.session.request(
