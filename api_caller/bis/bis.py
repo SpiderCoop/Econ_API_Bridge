@@ -1,6 +1,8 @@
 
 # Librerias necesarias -------------------------------------------------------------------------
 
+import json
+
 import pandas as pd
 from ..baseapi.baseapi import BaseAPI
 
@@ -114,71 +116,59 @@ class BIS_API(BaseAPI):
         Obtiene datos de series económicas desde la API de Banxico (SIE) y los devuelve en un DataFrame de pandas.
 
         Args:
-            serie_id (str | list): El ID de la serie o una lista de IDs de series a consultar desde la API de Banxico. 
-                                Si se proporciona un solo ID, puede ser una cadena de texto (str).
+            serie_id (str | list): El ID de la serie o una lista de IDs de series a consultar desde la API del BIS. 
+                                    Si se proporciona un solo ID, puede ser una cadena de texto (str).
             last_data (bool, optional): Si se establece en True, obtendrá solo las últimas observaciones disponibles de la serie.
                                     Por defecto es False.
             start_date (datetime, optional): La fecha de inicio de consulta tipo datetime para obtener datos en formato 'YYYY-MM-DD'. 
                                             Por defecto es '2000-01-01'.
             end_date (datetime, optional): La fecha de fin de consulta tipo datetime  para obtener datos en formato 'YYYY-MM-DD'.
                                             Por defecto es la fecha actual.
-            percentage_change (str, optional): Parámetro opcional que define si se desea obtener los incrmentos porcentuales de datos de la serie con respecto a observaciones anteriores
-                                    ('PorcObsAnt', 'PorcAnual', 'PorcAcumAnual'). Por defecto es None.
-            no_decimals (bool, optional): Si se establece en True, los datos se devolverán sin decimales. 
-                                            Por defecto es False.
 
         Returns:
             pandas.DataFrame: Un DataFrame con las series obtenidas. Las columnas representan las series, y las filas 
                             corresponden a las fechas de observación.
-            dict: Un diccionario con informacion de la serie
                             
         Raises:
-            Exception: Si la solicitud a la API de Banxico falla, devuelve un mensaje con el código de error y la respuesta.
+            Exception: Si la solicitud a la API de BIS falla, devuelve un mensaje con el código de error y la respuesta.
 
         Example:
             Obtener la última observación de una serie:
-            >>> df, dict = get_SIE_data(serie_id='SF43718', last_data=True)
+            >>> df = get_series_data(serie_id='SF43718', last_data=True)
 
             Obtener un rango de fechas para una serie histórica de su variación anual:
-            >>> df, dict = get_SIE_data(serie_id='SF43718', start_date='2020-01-01', end_date='2023-01-01', percentage_change='PorcAnual')
+            >>> df = get_series_data(serie_id='SF43718', start_date='2020-01-01', end_date='2023-01-01')
         """
 
         
         # Definir la URL de la API con el ID de la serie para obtener los datos de las series y realizar la solicitud
-        endpoint_datos, headers = self._set_series_params(serie_id)
+        endpoint_datos, headers = self._set_series_params(serie_id, last_data=last_data, start_date=start_date, end_date=end_date)
         data_json = self._make_request(endpoint_datos, headers=headers)
 
-        # Exportamos a un archivo .txt el JSON completo de la respuesta de la API para analizar su estructura y extraer los datos de las series
-        with open('response_bis.txt', 'w') as f:
-            f.write(str(data_json))
-
-        # Definir la URL de la API con el ID de la serie para obtener los metadatos de las series y realizar la solicitud
-        #metadata = self.get_series_metadata(serie_id)
-
-
-
-        time_periods = data_json["data"]["structure"]["dimensions"]["observation"][0]["values"]
-        dates = [t["id"] for t in time_periods]
-
-        # obtener series
-        series_dict = data_json["data"]["dataSets"][0]["series"]
-
         # Inicializar un DataFrame vacío para almacenar los datos de las series
-        series_df = pd.DataFrame(index=dates)
+        series_df = pd.DataFrame()
 
-        for series_key, series_content in series_dict.items():
+        # Obtenemos las fechas de observación de la serie a partir del JSON de datos
+        time_periods = data_json["data"]["structure"]["dimensions"]["observation"][0]["values"]
+        dates = pd.Series([pd.to_datetime(t["end"]).date() for t in time_periods])
+
+        # Obtenemos los datos de cada serie a partir del JSON de datos y los agregamos al DataFrame
+        series_dict = data_json["data"]["dataSets"][0]["series"]
+        for i, (series_key, series_content) in enumerate(series_dict.items()):
 
             observations = series_content["observations"]
 
-            values = [None] * len(dates)
-
+            # Crear una serie de pandas para cada serie de datos, tomamos los indices como guia para asignar los valores a las fechas correspondientes, y luego concatenamos cada serie al DataFrame principal
+            serie = pd.Series(dtype=float, name=serie_id[i] if isinstance(serie_id, list) else serie_id)
+            max_len = 0
             for obs_index, obs_value in observations.items():
                 idx = int(obs_index)
-                values[idx] = float(obs_value[0])
+                serie[idx] = float(obs_value[0])
 
-            series_df[series_key] = values
-
-            series_df.index = pd.PeriodIndex(series_df.index, freq="Q").to_timestamp()
+            series_df = pd.concat([series_df, serie], axis=1, join='outer')
+        
+        series_df.index = dates
+        series_df.sort_index(inplace=True, ascending=True)
 
         return series_df
 
