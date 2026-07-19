@@ -2,6 +2,6 @@ API_Caller es un conjunto de funciones diseñadas para facilitar la conexión co
 
 Si deseas agregar soporte para una nueva API o mejorar el código, ¡será bienvenido! Por favor, abre un Pull Request o crea un Issue para sugerencias.
 
-Este proyecto está bajo la licencia MIT, lo que significa que puedes usarlo y modificarlo libremente.
+Este proyecto está bajo la licencia Apache 2.0, lo que significa que puedes usarlo y modificarlo libremente.
 
 Recuerda que es recomendable guardar los tokens o claves de las API´s en un archivo .env 
