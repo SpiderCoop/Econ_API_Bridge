@@ -6,7 +6,7 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 import requests
 
-from ..baseapi.baseapi import BaseAPI
+from api_caller.baseapi.baseapi import BaseAPI
 
 # Clase ---------------------------------------------------------------------------------------
 

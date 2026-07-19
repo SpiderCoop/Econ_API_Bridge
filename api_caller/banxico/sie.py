@@ -2,7 +2,7 @@
 # Librerias necesarias -------------------------------------------------------------------------
 
 import pandas as pd
-from ..baseapi.baseapi import BaseAPI
+from api_caller.baseapi.baseapi import BaseAPI
 
 # Clase ---------------------------------------------------------------------------------------
 

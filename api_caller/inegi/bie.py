@@ -5,7 +5,7 @@ import pandas as pd
 from datetime import datetime, date
 import requests
 
-from ..baseapi.baseapi import BaseAPI
+from api_caller.baseapi.baseapi import BaseAPI
 
 # Clase -------------------------------------------------------------------------
 
