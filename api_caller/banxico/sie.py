@@ -83,6 +83,9 @@ class Banxico_SIE(BaseAPI):
             # Definir la URL de la API en un rango de fechas
             endpoint += f"/datos/{start_date}/{end_date}"
 
+        else:
+            endpoint += "/datos"
+
         
         # Definir los parámetros adicionales si se proporcionan
         additional_params = []
@@ -216,7 +219,7 @@ class Banxico_SIE(BaseAPI):
         series_df = series_df.sort_index()
 
         # Ajustamos la fecha a su dato original
-        if not last_data:
+        if not last_data and start_date is not None:
             start_date = pd.to_datetime(start_date) + pd.DateOffset(months=2)
             end_date = pd.to_datetime(end_date)
             series_df = series_df.loc[start_date:end_date]
