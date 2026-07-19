@@ -4,7 +4,7 @@
 import json
 
 import pandas as pd
-from api_caller.baseapi.baseapi import BaseAPI
+from econ_api_bridge.baseapi.baseapi import BaseAPI
 
 # Clase ---------------------------------------------------------------------------------------
 

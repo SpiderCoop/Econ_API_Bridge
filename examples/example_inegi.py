@@ -5,7 +5,7 @@ import pandas as pd
 from dotenv import load_dotenv
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from api_caller.inegi import INEGI_BIE
+from econ_api_bridge.inegi import INEGI_BIE
 
 # Carga variables de un archivo .env (para almacenar el token de la API de INEGI)
 load_dotenv()

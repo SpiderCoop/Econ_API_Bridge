@@ -5,7 +5,7 @@ import pandas as pd
 from dotenv import load_dotenv
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from api_caller.banxico import Banxico_SIE
+from econ_api_bridge.banxico import Banxico_SIE
 
 # Carga variables de un archivo .env (para almacenar el token de la API de Banxico)
 load_dotenv()

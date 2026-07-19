@@ -5,7 +5,7 @@ import pandas as pd
 from dotenv import load_dotenv
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from api_caller.bis import BIS_API
+from econ_api_bridge.bis import BIS_API
 
 # Ejemplo de uso de la clase API_Banxico|
 bis_api = BIS_API()
