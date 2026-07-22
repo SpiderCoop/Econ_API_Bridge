@@ -1,10 +1,9 @@
 # Ejemplo de uso
-import sys
+
 import os
 import pandas as pd
 from dotenv import load_dotenv
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from econ_api_bridge.bis import BIS_API
 
 # Ejemplo de uso de la clase API_Banxico|

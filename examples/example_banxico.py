@@ -1,10 +1,8 @@
 # Ejemplo de uso
-import sys
 import os
 import pandas as pd
 from dotenv import load_dotenv
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from econ_api_bridge.banxico import Banxico_SIE
 
 # Carga variables de un archivo .env (para almacenar el token de la API de Banxico)
